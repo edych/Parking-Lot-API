@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <include file="202111281120_add_Customer.xml" relativeToChangelogFile="true"/>
+    <include file="202111281121_add_ParkingSpot.xml" relativeToChangelogFile="true"/>
+    <include file="202111281122_add_Reservation.xml" relativeToChangelogFile="true"/>
+    <include file="202111281123_add_Reservation_constraints.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
