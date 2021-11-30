@@ -1,7 +1,16 @@
 package com.edych.parking.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Reservation {
 
@@ -16,28 +25,4 @@ public class Reservation {
 
     @OneToOne
     private ParkingSpot parkingSpot;
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public ParkingSpot getParkingSpot() {
-        return parkingSpot;
-    }
-
-    public void setParkingSpot(ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
-    }
 }
