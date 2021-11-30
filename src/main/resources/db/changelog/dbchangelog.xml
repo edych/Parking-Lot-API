@@ -9,5 +9,7 @@
     <include file="202111281121_add_ParkingSpot.xml" relativeToChangelogFile="true"/>
     <include file="202111281122_add_Reservation.xml" relativeToChangelogFile="true"/>
     <include file="202111281123_add_Reservation_constraints.xml" relativeToChangelogFile="true"/>
+    <include file="202111291635_add_Customer_Record.xml" relativeToChangelogFile="true"/>
+    <include file="202111291700_add_Parking_Spot_Records.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
