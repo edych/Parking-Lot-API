@@ -1,7 +1,52 @@
 
-# Parking Lot API
+#**Parking Lot API**
+[![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://circleci.com/gh/edych/Parking-Lot-API)
 
-<br>
-The Entity Relationship Diagram is as follows:
+I used H2 database for persistence and Liquibase for schema management.<br>
+There is no booking restrictions per *Customer*.<br>
 
-![alt text](documentation/jhipster-jdl.png)
+### Requirements
+* Java 11
+
+### Building and running the app
+```bash
+./mvnw clean install
+java -jar target/parking-0.0.1-SNAPSHOT.jar
+```
+
+### Entity Relationship Diagram
+
+![alt text](documentation/jdl.png)
+
+### Prepared data
+* There are two *ParkingFloors*, each with 30 *ParkingSpots*
+* There is one *Customer*: `id: 1, name: edych`
+* H2 Console is available at `http://localhost:8080/h2`
+
+## API
+
+### Postman
+There is `postman.json` collection provided in the root of repository.
+
+### Curls
+1. Create a new *Reservation*
+```bash
+curl -X POST 'localhost:8080/reservation' \
+-H 'Content-Type: application/json' \
+--data-raw '{"customerId": 1,"parkingSpotId": 5}'
+```
+
+2. Delete *Reservation*<br>
+```bash
+curl -X DELETE 'localhost:8080/reservation/1'
+```
+
+3. Get a list of all *Reservation*s made by *Customer*
+```bash
+curl -X GET 'localhost:8080/reservations?customerId=1'
+```
+
+4. Get a list of all available *ParkingSpot*s
+```bash
+curl -X GET 'localhost:8080/parking-spot/available'
+```
