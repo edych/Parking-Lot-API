@@ -14,7 +14,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="parking_spot_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
