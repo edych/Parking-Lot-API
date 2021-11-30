@@ -1,4 +1,4 @@
-package com.edych.parking.services.dto;
+package com.edych.parking.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
