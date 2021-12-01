@@ -11,4 +11,6 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     boolean existsByParkingSpotId(Long parkingSpotId);
 
     List<Reservation> findAllByCustomerId(Long customerId);
+
+    List<Reservation> findAll();
 }
