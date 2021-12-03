@@ -25,6 +25,9 @@ java -jar target/parking-0.0.1-SNAPSHOT.jar
 
 ## API
 
+### Swagger UI 
+Documentation available [here](http://localhost:8080/swagger-ui.html)
+
 ### Postman
 There is `postman.json` collection provided in the root of repository.
 
