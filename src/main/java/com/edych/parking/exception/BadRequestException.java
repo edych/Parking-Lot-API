@@ -2,7 +2,7 @@ package com.edych.parking.exception;
 
 public class BadRequestException extends RuntimeException {
 
-    public BadRequestException(String message) {
+    public BadRequestException(final String message) {
         super(message);
     }
 }

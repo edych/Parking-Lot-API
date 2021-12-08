@@ -1,9 +1,8 @@
 package com.edych.parking.service;
 
+import com.edych.parking.dto.ParkingSpotDto;
 import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.repository.ParkingSpotRepository;
-import com.edych.parking.repository.ReservationRepository;
-import com.edych.parking.dto.ParkingSpotDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,7 @@ public class ParkingSpotService {
 
     @Transactional(readOnly = true)
     public List<ParkingSpotDto> getAllAvailable() {
-        List<ParkingSpot> parkingSpots = parkingSpotRepository.getAllAvailable();
+        final List<ParkingSpot> parkingSpots = parkingSpotRepository.getAllAvailable();
 
         return parkingSpots.stream()
                 .map(spot ->

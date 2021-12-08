@@ -1,5 +1,6 @@
 package com.edych.parking.service;
 
+import com.edych.parking.dto.ReservationDto;
 import com.edych.parking.exception.ConflictException;
 import com.edych.parking.exception.NotFoundException;
 import com.edych.parking.model.Customer;
@@ -8,7 +9,6 @@ import com.edych.parking.model.Reservation;
 import com.edych.parking.repository.CustomerRepository;
 import com.edych.parking.repository.ParkingSpotRepository;
 import com.edych.parking.repository.ReservationRepository;
-import com.edych.parking.dto.ReservationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,26 +25,26 @@ public class ReservationService {
     private final ParkingSpotRepository parkingSpotRepository;
 
     @Transactional
-    public ReservationDto create(ReservationDto dto) {
-        Customer customer = customerRepository.findById(dto.getCustomerId())
+    public ReservationDto create(final ReservationDto dto) {
+        final Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new NotFoundException("customer", dto.getCustomerId()));
 
-        ParkingSpot parkingSpot = parkingSpotRepository.findById(dto.getParkingSpotId())
+        final ParkingSpot parkingSpot = parkingSpotRepository.findById(dto.getParkingSpotId())
                 .orElseThrow(() -> new NotFoundException("parkingSpot", dto.getParkingSpotId()));
 
-        boolean spotTaken = reservationRepository.existsByParkingSpotId(dto.getParkingSpotId());
+        final boolean spotTaken = reservationRepository.existsByParkingSpotId(dto.getParkingSpotId());
 
         if (spotTaken) {
-            String msg = String.format("Parking spot id [%s] is already taken", dto.getParkingSpotId());
+            final String msg = String.format("Parking spot id [%s] is already taken", dto.getParkingSpotId());
             throw new ConflictException(msg);
         }
 
-        Reservation reservation = Reservation.builder()
+        final Reservation reservation = Reservation.builder()
                 .customer(customer)
                 .parkingSpot(parkingSpot)
                 .build();
 
-        Reservation saved = reservationRepository.save(reservation);
+        final Reservation saved = reservationRepository.save(reservation);
 
         return ReservationDto.builder()
                 .id(saved.getId())
@@ -54,8 +54,8 @@ public class ReservationService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        boolean reservationExists = reservationRepository.existsById(id);
+    public void deleteById(final Long id) {
+        final boolean reservationExists = reservationRepository.existsById(id);
 
         if (!reservationExists) {
             throw new NotFoundException("reservation", id);
@@ -65,8 +65,8 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReservationDto> getAllByCustomerId(Long customerId) {
-        boolean customerExists = customerRepository.existsById(customerId);
+    public List<ReservationDto> getAllByCustomerId(final Long customerId) {
+        final boolean customerExists = customerRepository.existsById(customerId);
 
         if (!customerExists) {
             throw new NotFoundException("customer", customerId);

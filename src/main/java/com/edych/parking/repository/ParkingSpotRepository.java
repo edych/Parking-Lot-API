@@ -1,6 +1,5 @@
 package com.edych.parking.repository;
 
-import com.edych.parking.dto.ParkingSpotDto;
 import com.edych.parking.model.ParkingSpot;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
