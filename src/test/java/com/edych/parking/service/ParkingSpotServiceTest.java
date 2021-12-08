@@ -1,10 +1,8 @@
 package com.edych.parking.service;
 
-import com.edych.parking.model.ParkingSpot;
-import com.edych.parking.model.Reservation;
-import com.edych.parking.repository.ParkingSpotRepository;
-import com.edych.parking.repository.ReservationRepository;
 import com.edych.parking.dto.ParkingSpotDto;
+import com.edych.parking.model.ParkingSpot;
+import com.edych.parking.repository.ParkingSpotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +26,12 @@ class ParkingSpotServiceTest {
     @Mock
     ParkingSpotRepository parkingSpotRepository;
 
-    @Mock
-    ReservationRepository reservationRepository;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    private ParkingSpot parkingSpotFactory(Long id) {
+    private ParkingSpot parkingSpotFactory(final Long id) {
         return ParkingSpot.builder()
                 .id(id)
                 .floor(1)
@@ -44,104 +39,38 @@ class ParkingSpotServiceTest {
                 .build();
     }
 
-    private Reservation reservationFactory(Long id, ParkingSpot parkingSpot) {
-        return Reservation.builder()
-                .id(id)
-                .parkingSpot(parkingSpot)
-                .build();
-    }
-
     @Test
-    void shouldReturnAvailableParkingSpotsWhenFewAreTaken() {
+    void shouldReturnAvailableParkingSpotsDtoWhenParkingSpotRepositoryReturnsNotEmptyParkingSpotList() {
         // given
-        ParkingSpot p1 = parkingSpotFactory(1L);
-        ParkingSpot p2 = parkingSpotFactory(2L);
-        ParkingSpot p3 = parkingSpotFactory(3L);
-        ParkingSpot p4 = parkingSpotFactory(4L);
+        final ParkingSpot p1 = parkingSpotFactory(1L);
+        final ParkingSpot p2 = parkingSpotFactory(2L);
+        final ParkingSpot p3 = parkingSpotFactory(3L);
+        final ParkingSpot p4 = parkingSpotFactory(4L);
 
-        Reservation r1 = reservationFactory(1L, p1);
-        Reservation r2 = reservationFactory(2L, p2);
-
-        List<ParkingSpot> all = List.of(p1, p2, p3, p4);
-        List<Reservation> reservations = List.of(r1, r2);
+        final List<ParkingSpot> all = List.of(p1, p2, p3, p4);
 
         // when
-        when(parkingSpotRepository.findAll()).thenReturn(all);
-        when(reservationRepository.findAll()).thenReturn(reservations);
+        when(parkingSpotRepository.getAllAvailable()).thenReturn(all);
 
-        List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
+        final List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
 
         // then
-        assertEquals(2, allAvailable.size());
-
-        verify(parkingSpotRepository, times(1)).findAll();
-        verify(reservationRepository, times(1)).findAll();
+        assertEquals(all.size(), allAvailable.size());
+        verify(parkingSpotRepository, times(1)).getAllAvailable();
     }
 
     @Test
-    void shouldReturnAllParkingSpotsWhenThereIsNoReservation() {
+    void shouldNotReturnAvailableParkingSpotsDtoWhenParkingSpotRepositoryReturnsEmptyParkingSpotList() {
         // given
-        ParkingSpot p1 = parkingSpotFactory(1L);
-        ParkingSpot p2 = parkingSpotFactory(2L);
-        ParkingSpot p3 = parkingSpotFactory(3L);
-
-        List<ParkingSpot> all = List.of(p1, p2, p3);
-        List<Reservation> reservations = new ArrayList<>();
+        final List<ParkingSpot> all = new ArrayList<>();
 
         // when
-        when(parkingSpotRepository.findAll()).thenReturn(all);
-        when(reservationRepository.findAll()).thenReturn(reservations);
+        when(parkingSpotRepository.getAllAvailable()).thenReturn(all);
 
-        List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
-
-        // then
-        assertEquals(3, allAvailable.size());
-
-        verify(parkingSpotRepository, times(1)).findAll();
-        verify(reservationRepository, times(1)).findAll();
-    }
-
-    @Test
-    void shouldReturnEmptyListWhenThereAreNoParkingSpots() {
-        // given
-        List<ParkingSpot> all = new ArrayList<>();
-        List<Reservation> reservations = new ArrayList<>();
-
-        // when
-        when(parkingSpotRepository.findAll()).thenReturn(all);
-        when(reservationRepository.findAll()).thenReturn(reservations);
-
-        List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
+        final List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
 
         // then
         assertEquals(0, allAvailable.size());
-
-        verify(parkingSpotRepository, times(1)).findAll();
-        verify(reservationRepository, times(1)).findAll();
-    }
-
-    @Test
-    void shouldReturnEmptyListWhenThereIsNoParkingSpotsAvailable() {
-        // given
-        ParkingSpot p1 = parkingSpotFactory(1L);
-        ParkingSpot p2 = parkingSpotFactory(2L);
-
-        Reservation r1 = reservationFactory(1L, p1);
-        Reservation r2 = reservationFactory(2L, p2);
-
-        List<ParkingSpot> all = List.of(p1, p2);
-        List<Reservation> reservations = List.of(r1, r2);
-
-        // when
-        when(parkingSpotRepository.findAll()).thenReturn(all);
-        when(reservationRepository.findAll()).thenReturn(reservations);
-
-        List<ParkingSpotDto> allAvailable = parkingSpotService.getAllAvailable();
-
-        // then
-        assertEquals(0, allAvailable.size());
-
-        verify(parkingSpotRepository, times(1)).findAll();
-        verify(reservationRepository, times(1)).findAll();
+        verify(parkingSpotRepository, times(1)).getAllAvailable();
     }
 }
