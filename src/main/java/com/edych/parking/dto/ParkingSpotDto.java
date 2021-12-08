@@ -1,4 +1,4 @@
-package com.edych.parking.service.dto;
+package com.edych.parking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationDto {
+public class ParkingSpotDto {
 
     private Long id;
-    private Long customerId;
-    private Long parkingSpotId;
+    private Integer number;
+    private Integer floor;
+    private Boolean handicapped;
 }
