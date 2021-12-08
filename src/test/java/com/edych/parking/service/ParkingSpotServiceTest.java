@@ -4,7 +4,7 @@ import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.model.Reservation;
 import com.edych.parking.repository.ParkingSpotRepository;
 import com.edych.parking.repository.ReservationRepository;
-import com.edych.parking.service.dto.ParkingSpotDto;
+import com.edych.parking.dto.ParkingSpotDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

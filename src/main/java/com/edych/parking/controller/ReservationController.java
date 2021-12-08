@@ -2,7 +2,7 @@ package com.edych.parking.controller;
 
 import com.edych.parking.exception.BadRequestException;
 import com.edych.parking.service.ReservationService;
-import com.edych.parking.service.dto.ReservationDto;
+import com.edych.parking.dto.ReservationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

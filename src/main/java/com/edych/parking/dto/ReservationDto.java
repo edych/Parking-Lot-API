@@ -1,4 +1,4 @@
-package com.edych.parking.service.dto;
+package com.edych.parking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExceptionDto {
+public class ReservationDto {
 
-    private String status;
-    private Integer statusCode;
-    private String message;
+    private Long id;
+    private Long customerId;
+    private Long parkingSpotId;
 }

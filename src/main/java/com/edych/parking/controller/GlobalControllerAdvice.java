@@ -3,7 +3,7 @@ package com.edych.parking.controller;
 import com.edych.parking.exception.BadRequestException;
 import com.edych.parking.exception.ConflictException;
 import com.edych.parking.exception.NotFoundException;
-import com.edych.parking.service.dto.ExceptionDto;
+import com.edych.parking.dto.ExceptionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

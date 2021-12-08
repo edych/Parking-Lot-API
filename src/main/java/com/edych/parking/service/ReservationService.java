@@ -8,9 +8,10 @@ import com.edych.parking.model.Reservation;
 import com.edych.parking.repository.CustomerRepository;
 import com.edych.parking.repository.ParkingSpotRepository;
 import com.edych.parking.repository.ReservationRepository;
-import com.edych.parking.service.dto.ReservationDto;
+import com.edych.parking.dto.ReservationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class ReservationService {
     private final CustomerRepository customerRepository;
     private final ParkingSpotRepository parkingSpotRepository;
 
+    @Transactional
     public ReservationDto create(ReservationDto dto) {
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new NotFoundException("customer", dto.getCustomerId()));
@@ -51,6 +53,7 @@ public class ReservationService {
                 .build();
     }
 
+    @Transactional
     public void deleteById(Long id) {
         boolean reservationExists = reservationRepository.existsById(id);
 
@@ -61,6 +64,7 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationDto> getAllByCustomerId(Long customerId) {
         boolean customerExists = customerRepository.existsById(customerId);
 
