@@ -3,6 +3,7 @@ package com.edych.parking.service;
 import com.edych.parking.dto.ParkingSpotDto;
 import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.repository.ParkingSpotRepository;
+import com.edych.parking.util.TestObjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,31 +22,23 @@ import static org.mockito.Mockito.*;
 class ParkingSpotServiceTest {
 
     @InjectMocks
-    ParkingSpotService parkingSpotService;
+    private ParkingSpotService parkingSpotService;
 
     @Mock
-    ParkingSpotRepository parkingSpotRepository;
+    private ParkingSpotRepository parkingSpotRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    private ParkingSpot parkingSpotFactory(final Long id) {
-        return ParkingSpot.builder()
-                .id(id)
-                .floor(1)
-                .handicapped(true)
-                .build();
-    }
-
     @Test
     void shouldReturnAvailableParkingSpotsDtoWhenParkingSpotRepositoryReturnsNotEmptyParkingSpotList() {
         // given
-        final ParkingSpot p1 = parkingSpotFactory(1L);
-        final ParkingSpot p2 = parkingSpotFactory(2L);
-        final ParkingSpot p3 = parkingSpotFactory(3L);
-        final ParkingSpot p4 = parkingSpotFactory(4L);
+        final ParkingSpot p1 = TestObjectFactory.parkingSpot(1L);
+        final ParkingSpot p2 = TestObjectFactory.parkingSpot(2L);
+        final ParkingSpot p3 = TestObjectFactory.parkingSpot(3L);
+        final ParkingSpot p4 = TestObjectFactory.parkingSpot(4L);
 
         final List<ParkingSpot> all = List.of(p1, p2, p3, p4);
 

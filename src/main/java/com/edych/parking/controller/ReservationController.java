@@ -15,6 +15,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/reservation")
     public ReservationDto create(@RequestBody final ReservationDto dto) {
         if (dto.getId() != null) {

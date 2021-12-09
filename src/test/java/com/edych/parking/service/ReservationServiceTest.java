@@ -1,5 +1,6 @@
 package com.edych.parking.service;
 
+import com.edych.parking.dto.ReservationDto;
 import com.edych.parking.exception.ConflictException;
 import com.edych.parking.exception.NotFoundException;
 import com.edych.parking.model.Customer;
@@ -8,7 +9,6 @@ import com.edych.parking.model.Reservation;
 import com.edych.parking.repository.CustomerRepository;
 import com.edych.parking.repository.ParkingSpotRepository;
 import com.edych.parking.repository.ReservationRepository;
-import com.edych.parking.dto.ReservationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -29,23 +29,23 @@ import static org.mockito.Mockito.*;
 class ReservationServiceTest {
 
     @InjectMocks
-    ReservationService reservationService;
+    private ReservationService reservationService;
 
     @Mock
-    ReservationRepository reservationRepository;
+    private ReservationRepository reservationRepository;
 
     @Mock
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Mock
-    ParkingSpotRepository parkingSpotRepository;
+    private ParkingSpotRepository parkingSpotRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    private ParkingSpot parkingSpotFactory(Long id) {
+    private ParkingSpot parkingSpotFactory(final Long id) {
         return ParkingSpot.builder()
                 .id(id)
                 .floor(1)
@@ -53,7 +53,7 @@ class ReservationServiceTest {
                 .build();
     }
 
-    private Reservation reservationFactory(Long id, ParkingSpot parkingSpot, Customer customer) {
+    private Reservation reservationFactory(final Long id, final ParkingSpot parkingSpot, final Customer customer) {
         return Reservation.builder()
                 .id(id)
                 .customer(customer)
@@ -61,7 +61,7 @@ class ReservationServiceTest {
                 .build();
     }
 
-    private ReservationDto reservationDtoFactory(Long id, ParkingSpot parkingSpot, Customer customer) {
+    private ReservationDto reservationDtoFactory(final Long id, final ParkingSpot parkingSpot, final Customer customer) {
         return ReservationDto.builder()
                 .id(id)
                 .customerId(customer.getId())
@@ -69,7 +69,7 @@ class ReservationServiceTest {
                 .build();
     }
 
-    private Customer customerFactory(Long id, String name) {
+    private Customer customerFactory(final Long id, final String name) {
         return Customer.builder()
                 .id(id)
                 .name(name)
@@ -79,12 +79,12 @@ class ReservationServiceTest {
     @Test
     void shouldCreateReservationWhenCustomerExistsParkingSpotExistsAndIsNotTaken() {
         //given
-        ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        Customer customer = customerFactory(1L, "edych");
+        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
+        final Customer customer = customerFactory(1L, "edych");
 
-        ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
-        Reservation reservation = reservationFactory(null, parkingSpot, customer);
-        Reservation savedReservation = reservationFactory(1L, parkingSpot, customer);
+        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final Reservation reservation = reservationFactory(null, parkingSpot, customer);
+        final Reservation savedReservation = reservationFactory(1L, parkingSpot, customer);
 
         //when
         when(customerRepository.findById(reservationDto.getCustomerId())).thenReturn(Optional.of(customer));
@@ -92,7 +92,7 @@ class ReservationServiceTest {
         when(reservationRepository.existsByParkingSpotId(reservationDto.getParkingSpotId())).thenReturn(false);
         when(reservationRepository.save(reservation)).thenReturn(savedReservation);
 
-        ReservationDto returnedReservationDto = reservationService.create(reservationDto);
+        final ReservationDto returnedReservationDto = reservationService.create(reservationDto);
 
         //then
         assertEquals(parkingSpot.getId(), returnedReservationDto.getParkingSpotId());
@@ -103,15 +103,15 @@ class ReservationServiceTest {
     @Test
     void shouldReturnExceptionWhenCustomerDoesNotExist() {
         //given
-        ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        Customer customer = customerFactory(1L, "edych");
+        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
+        final Customer customer = customerFactory(1L, "edych");
 
-        ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
 
         //when
         when(customerRepository.findById(reservationDto.getCustomerId())).thenReturn(Optional.empty());
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+        final NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             reservationService.create(reservationDto);
         });
 
@@ -122,16 +122,16 @@ class ReservationServiceTest {
     @Test
     void shouldReturnExceptionWhenParkingSpotDoesNotExist() {
         //given
-        ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        Customer customer = customerFactory(1L, "edych");
+        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
+        final Customer customer = customerFactory(1L, "edych");
 
-        ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
 
         //when
         when(customerRepository.findById(reservationDto.getCustomerId())).thenReturn(Optional.of(customer));
         when(parkingSpotRepository.findById(reservationDto.getParkingSpotId())).thenReturn(Optional.empty());
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+        final NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             reservationService.create(reservationDto);
         });
 
@@ -142,19 +142,17 @@ class ReservationServiceTest {
     @Test
     void shouldReturnExceptionWhenParkingSpotIsTaken() {
         //given
-        ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        Customer customer = customerFactory(1L, "edych");
+        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
+        final Customer customer = customerFactory(1L, "edych");
 
-        ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
-        Reservation reservation = reservationFactory(null, parkingSpot, customer);
-        Reservation savedReservation = reservationFactory(1L, parkingSpot, customer);
+        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
 
         //when
         when(customerRepository.findById(reservationDto.getCustomerId())).thenReturn(Optional.of(customer));
         when(parkingSpotRepository.findById(reservationDto.getParkingSpotId())).thenReturn(Optional.of(parkingSpot));
         when(reservationRepository.existsByParkingSpotId(reservationDto.getParkingSpotId())).thenReturn(true);
 
-        ConflictException exception = assertThrows(ConflictException.class, () -> {
+        final ConflictException exception = assertThrows(ConflictException.class, () -> {
             reservationService.create(reservationDto);
         });
 
@@ -165,8 +163,8 @@ class ReservationServiceTest {
     @Test
     void shouldDeleteByIdWhenReservationExists() {
         //given
-        Long id = 1L;
-        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        final Long id = 1L;
+        final ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
 
         //when
         when(reservationRepository.existsById(id)).thenReturn(true);
@@ -174,19 +172,19 @@ class ReservationServiceTest {
 
         //then
         verify(reservationRepository, times(1)).deleteById(argumentCaptor.capture());
-        Long capturedValue = argumentCaptor.getValue();
+        final Long capturedValue = argumentCaptor.getValue();
         assertEquals(id, capturedValue);
     }
 
     @Test
     void doNotDeleteByIdWhenReservationDoesNotExist() {
         //given
-        Long id = 1L;
+        final Long id = 1L;
 
         //when
         when(reservationRepository.existsById(id)).thenReturn(false);
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+        final NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             reservationService.deleteById(id);
         });
 
@@ -197,21 +195,21 @@ class ReservationServiceTest {
     @Test
     void shouldReturnReservationsListByCustomerIdWhenCustomerExists() {
         //given
-        Long customerId = 1L;
-        ParkingSpot parkingSpot1 = parkingSpotFactory(1L);
-        ParkingSpot parkingSpot2 = parkingSpotFactory(2L);
-        Customer customer = customerFactory(1L, "edych");
+        final Long customerId = 1L;
+        final ParkingSpot parkingSpot1 = parkingSpotFactory(1L);
+        final ParkingSpot parkingSpot2 = parkingSpotFactory(2L);
+        final Customer customer = customerFactory(1L, "edych");
 
-        Reservation reservation1 = reservationFactory(1L, parkingSpot1, customer);
-        Reservation reservation2 = reservationFactory(2L, parkingSpot2, customer);
+        final Reservation reservation1 = reservationFactory(1L, parkingSpot1, customer);
+        final Reservation reservation2 = reservationFactory(2L, parkingSpot2, customer);
 
-        List<Reservation> reservations = List.of(reservation1, reservation2);
+        final List<Reservation> reservations = List.of(reservation1, reservation2);
 
         //when
         when(customerRepository.existsById(customerId)).thenReturn(true);
         when(reservationRepository.findAllByCustomerId(customerId)).thenReturn(reservations);
 
-        List<ReservationDto> reservationDtoList = reservationService.getAllByCustomerId(customerId);
+        final List<ReservationDto> reservationDtoList = reservationService.getAllByCustomerId(customerId);
 
         //then
         assertEquals(reservations.size(), reservationDtoList.size());
@@ -220,12 +218,12 @@ class ReservationServiceTest {
     @Test
     void shouldNotReturnReservationsListByCustomerIdWhenCustomerDoesNotExist() {
         //given
-        Long customerId = 1L;
+        final Long customerId = 1L;
 
         //when
         when(customerRepository.existsById(customerId)).thenReturn(false);
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+        final NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             reservationService.getAllByCustomerId(customerId);
         });
 
