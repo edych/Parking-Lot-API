@@ -7,8 +7,7 @@ import com.edych.parking.exception.NotFoundException;
 import com.edych.parking.model.Customer;
 import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.service.ReservationService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.edych.parking.util.TestObjectFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,66 +38,42 @@ class ReservationControllerTestIT {
     @MockBean
     private ReservationService reservationService;
 
-    private ReservationDto reservationDtoFactory(final Long id, final ParkingSpot parkingSpot, final Customer customer) {
-        return ReservationDto.builder()
-                .id(id)
-                .customerId(customer.getId())
-                .parkingSpotId(parkingSpot.getId())
-                .build();
-    }
-
-    private Customer customerFactory(final Long id, final String name) {
-        return Customer.builder()
-                .id(id)
-                .name(name)
-                .build();
-    }
-
-    private ParkingSpot parkingSpotFactory(final Long id) {
-        return ParkingSpot.builder()
-                .id(id)
-                .floor(1)
-                .handicapped(true)
-                .build();
-    }
-
-    public static String asJsonString(final Object obj) throws JsonProcessingException {
-            return new ObjectMapper().writeValueAsString(obj);
-    }
-
     @Test
     void createReservationWhenCustomerAndParkingSpotExistsAndParkingSpotIsNotTaken() throws Exception {
         //given
-        final String url = "/reservation"; // TODO fix urls to be plural
-        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        final Customer customer = customerFactory(1L, "edych");
-        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final String url = "/reservation";
+        final ParkingSpot parkingSpot = TestObjectFactory.parkingSpot(1L);
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
+        final ReservationDto reservationDto = TestObjectFactory.reservationDto(null, parkingSpot, customer);
 
-        final ReservationDto returnedReservationDto = reservationDtoFactory(1L, parkingSpot, customer);
+        final ReservationDto returnedReservationDto = TestObjectFactory.reservationDto(1L, parkingSpot, customer);
 
         //when
         when(reservationService.create(reservationDto)).thenReturn(returnedReservationDto);
 
         //then
-        mockMvc.perform(post(url).content(asJsonString(reservationDto))
+        mockMvc.perform(post(url).content(TestObjectFactory.asJsonString(reservationDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()); // TODO add json checks
+                .andExpect(jsonPath("$.id").value(returnedReservationDto.getId()))
+                .andExpect(jsonPath("$.customerId").value(returnedReservationDto.getCustomerId()))
+                .andExpect(jsonPath("$.parkingSpotId").value(returnedReservationDto.getParkingSpotId()))
+                .andExpect(status().isCreated());
     }
 
     @Test
     void throwBadRequestExceptionWhenRequestHasAnId() throws Exception {
         //given
         final String url = "/reservation";
-        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        final Customer customer = customerFactory(1L, "edych");
-        final ReservationDto reservationDto = reservationDtoFactory(1L, parkingSpot, customer);
+        final ParkingSpot parkingSpot = TestObjectFactory.parkingSpot(1L);
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
+        final ReservationDto reservationDto = TestObjectFactory.reservationDto(1L, parkingSpot, customer);
 
         //when
         final String expMessage = "a request to create a new Reservation cannot have an id";
 
         //then
-        mockMvc.perform(post(url).content(asJsonString(reservationDto))
+        mockMvc.perform(post(url).content(TestObjectFactory.asJsonString(reservationDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -110,9 +85,9 @@ class ReservationControllerTestIT {
     void throwNotFoundExceptionWhenCustomerDoesNotExist() throws Exception {
         //given
         final String url = "/reservation";
-        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        final Customer customer = customerFactory(2L, "jane");
-        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final ParkingSpot parkingSpot = TestObjectFactory.parkingSpot(1L);
+        final Customer customer = TestObjectFactory.customer(2L, "jane");
+        final ReservationDto reservationDto = TestObjectFactory.reservationDto(null, parkingSpot, customer);
 
         //when
         final NotFoundException expectedException = new NotFoundException("customer", customer.getId());
@@ -120,7 +95,7 @@ class ReservationControllerTestIT {
 
         //then
         final String expMessage = "Resource [customer] with id [2] does not exist.";
-        mockMvc.perform(post(url).content(asJsonString(reservationDto))
+        mockMvc.perform(post(url).content(TestObjectFactory.asJsonString(reservationDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -132,9 +107,9 @@ class ReservationControllerTestIT {
     void throwNotFoundExceptionWhenParkingSpotDoesNotExist() throws Exception {
         //given
         final String url = "/reservation";
-        final ParkingSpot parkingSpot = parkingSpotFactory(31L);
-        final Customer customer = customerFactory(1L, "edych");
-        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final ParkingSpot parkingSpot = TestObjectFactory.parkingSpot(31L);
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
+        final ReservationDto reservationDto = TestObjectFactory.reservationDto(null, parkingSpot, customer);
 
         //when
         final NotFoundException expectedException = new NotFoundException("parkingSpot", parkingSpot.getId());
@@ -142,7 +117,7 @@ class ReservationControllerTestIT {
 
         //then
         final String expMessage = "Resource [parkingSpot] with id [31] does not exist.";
-        mockMvc.perform(post(url).content(asJsonString(reservationDto))
+        mockMvc.perform(post(url).content(TestObjectFactory.asJsonString(reservationDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -154,9 +129,9 @@ class ReservationControllerTestIT {
     void throwNotConflictExceptionWhenParkingSpotIsTaken() throws Exception {
         //given
         final String url = "/reservation";
-        final ParkingSpot parkingSpot = parkingSpotFactory(1L);
-        final Customer customer = customerFactory(1L, "edych");
-        final ReservationDto reservationDto = reservationDtoFactory(null, parkingSpot, customer);
+        final ParkingSpot parkingSpot = TestObjectFactory.parkingSpot(1L);
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
+        final ReservationDto reservationDto = TestObjectFactory.reservationDto(null, parkingSpot, customer);
         final String expMessage = "Parking spot id [1] is already taken";
 
         //when
@@ -164,7 +139,7 @@ class ReservationControllerTestIT {
         when(reservationService.create(reservationDto)).thenThrow(expectedException);
 
         //then
-        mockMvc.perform(post(url).content(asJsonString(reservationDto))
+        mockMvc.perform(post(url).content(TestObjectFactory.asJsonString(reservationDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
@@ -210,9 +185,9 @@ class ReservationControllerTestIT {
         //given
         final Long id = 1L;
         final String url = "/reservations?customerId=" + id;
-        final Customer customer = customerFactory(1L, "edych");
-        final ParkingSpot ps1 = parkingSpotFactory(1L);
-        final ReservationDto r1 = reservationDtoFactory(1L, ps1, customer);
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
+        final ParkingSpot ps1 = TestObjectFactory.parkingSpot(1L);
+        final ReservationDto r1 = TestObjectFactory.reservationDto(1L, ps1, customer);
         final List<ReservationDto> reservations = List.of(r1);
 
         //when
@@ -220,8 +195,10 @@ class ReservationControllerTestIT {
 
         //then
         mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1))); // TODO check body
+                .andExpect(jsonPath("$[0].id").value(reservations.get(0).getId()))
+                .andExpect(jsonPath("$[0].customerId").value(reservations.get(0).getCustomerId()))
+                .andExpect(jsonPath("$[0].parkingSpotId").value(reservations.get(0).getParkingSpotId()))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -229,7 +206,7 @@ class ReservationControllerTestIT {
         //given
         final Long id = 1L;
         final String url = "/reservations?customerId=" + id;
-        final Customer customer = customerFactory(1L, "edych");
+        final Customer customer = TestObjectFactory.customer(1L, "edych");
         final List<ReservationDto> reservations = new ArrayList<>();
 
         //when
