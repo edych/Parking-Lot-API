@@ -1,0 +1,25 @@
+codecov:
+  require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+  ignore:
+    - "src/main/java/com/edych/parking/dto/*"  # ignore folders and all its contents
+    - "src/main/java/com/edych/parking/model/*"  # ignore folders and all its contents
+    - "src/main/java/com/edych/parking/ParkingApplication.java"  # ignore file
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: no
