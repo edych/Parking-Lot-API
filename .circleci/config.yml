@@ -14,7 +14,4 @@ workflows:
   sample:
     jobs:
       - build-and-test
-        upload-to-codecov:
-          jobs:
-            - checkout
-            - codecov/upload
+      - codecov/upload
