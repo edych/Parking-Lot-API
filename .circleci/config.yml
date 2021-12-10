@@ -10,8 +10,8 @@ jobs:
       - run:
           name: Build
           command: mvn -B clean install
+      - codecov/upload
 workflows:
   sample:
     jobs:
       - build-and-test
-      - codecov/upload
