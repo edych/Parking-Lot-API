@@ -2,7 +2,7 @@
 # **<p align="center">🚗 🅿️  Parking Lot API  🅿️ 🚙</p>**
 
 [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://circleci.com/gh/edych/Parking-Lot-API)
-[![codecov](https://codecov.io/gh/edych/Parking-Lot-API/branch/main/graph/badge.svg?token=124TVBSM07)](https://codecov.io/gh/edych/Parking-Lot-API)
+[![codecov](https://codecov.io/gh/edych/Parking-Lot-API/branch/main/graph/badge.svg?token=e8ebc5cf-1c0f-4da0-9920-a69ec6fe3830)](https://codecov.io/gh/edych/Parking-Lot-API)
 
 I used H2 database for persistence and Liquibase for schema management.<br>
 There is no booking restrictions per *Customer*.<br>
