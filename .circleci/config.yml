@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@3.2.2
 jobs:
   build-and-test:
     docker:
@@ -8,6 +10,7 @@ jobs:
       - run:
           name: Build
           command: mvn -B clean install
+      - codecov/upload
 workflows:
   sample:
     jobs:
