@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -56,17 +56,30 @@
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-failsafe-plugin</artifactId>
-			<version>3.0.0-M5</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<executions>
+					<execution>
+						<id>integration-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+							<reuseForks>true</reuseForks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -85,13 +98,21 @@
 				<version>0.8.7</version>
 				<executions>
 					<execution>
+						<id>prepare-agent-unit</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
+						<id>prepare-agent-it</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+					</execution>
+					<execution>
 						<id>report</id>
-						<phase>test</phase>
+						<phase>post-integration-test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -100,5 +121,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
