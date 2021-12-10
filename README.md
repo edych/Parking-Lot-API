@@ -1,5 +1,5 @@
 
-# **Parking Lot API**
+# **<p align="center">🚗 🅿️  Parking Lot API  🅿️ 🚙</p>**
 
 [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://circleci.com/gh/edych/Parking-Lot-API)
 
