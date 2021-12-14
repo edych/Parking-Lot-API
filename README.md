@@ -34,11 +34,11 @@ java -jar target/parking-0.0.1-SNAPSHOT.jar
 
 ## API
 
-### Swagger UI 
-Documentation available at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
 ### AWS ECS 
 Live version is running at [http://edych.codes/swagger-ui.html](http://edych.codes/swagger-ui.html) 
+
+### Swagger UI 
+Documentation available at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ### Postman
 There is `postman.json` collection provided in the root of repository.
