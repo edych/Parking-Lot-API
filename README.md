@@ -44,24 +44,24 @@ Documentation available at [http://localhost:8080/swagger-ui.html](http://localh
 There is `postman.json` collection provided in the root of repository.
 
 ### Curls
-1. Create a new *Reservation*
+**1. Create a new *Reservation***
 ```bash
 curl -X POST 'localhost:8080/reservation' \
 -H 'Content-Type: application/json' \
 --data-raw '{"customerId": 1,"parkingSpotId": 5}'
 ```
 
-2. Delete *Reservation*<br>
+**2. Delete *Reservation***<br>
 ```bash
 curl -X DELETE 'localhost:8080/reservation/1'
 ```
 
-3. Get a list of all *Reservation*s made by *Customer*
+**3. Get a list of all *Reservation*s made by *Customer***
 ```bash
 curl -X GET 'localhost:8080/reservations?customerId=1'
 ```
 
-4. Get a list of all available *ParkingSpot*s
+**4. Get a list of all available *ParkingSpot*s**
 ```bash
 curl -X GET 'localhost:8080/parking-spot/available'
 ```
