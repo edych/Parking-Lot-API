@@ -1,16 +1,18 @@
 package com.edych.parking.service;
 
 import com.edych.parking.dto.ParkingSpotDto;
+import com.edych.parking.mapper.ParkingSpotDtoMapperImpl;
 import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.repository.ParkingSpotRepository;
 import com.edych.parking.util.TestObjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ParkingSpotService.class, ParkingSpotDtoMapperImpl.class})
 class ParkingSpotServiceTest {
 
-    @InjectMocks
+    @Autowired
     private ParkingSpotService parkingSpotService;
 
-    @Mock
+    @MockBean
     private ParkingSpotRepository parkingSpotRepository;
 
     @BeforeEach
