@@ -3,6 +3,7 @@ package com.edych.parking.service;
 import com.edych.parking.dto.ReservationDto;
 import com.edych.parking.exception.ConflictException;
 import com.edych.parking.exception.NotFoundException;
+import com.edych.parking.mapper.ReservationDtoMapper;
 import com.edych.parking.model.Customer;
 import com.edych.parking.model.ParkingSpot;
 import com.edych.parking.model.Reservation;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CustomerRepository customerRepository;
     private final ParkingSpotRepository parkingSpotRepository;
+    private final ReservationDtoMapper reservationDtoMapper;
 
     @Transactional
     public ReservationDto create(final ReservationDto dto) {
@@ -46,11 +47,7 @@ public class ReservationService {
 
         final Reservation saved = reservationRepository.save(reservation);
 
-        return ReservationDto.builder()
-                .id(saved.getId())
-                .customerId(saved.getCustomer().getId())
-                .parkingSpotId(saved.getParkingSpot().getId())
-                .build();
+        return reservationDtoMapper.toDto(saved);
     }
 
     @Transactional
@@ -72,13 +69,8 @@ public class ReservationService {
             throw new NotFoundException("customer", customerId);
         }
 
-        return reservationRepository.findAllByCustomerId(customerId)
-                .stream()
-                .map(r -> ReservationDto.builder()
-                        .id(r.getId())
-                        .customerId(r.getCustomer().getId())
-                        .parkingSpotId(r.getParkingSpot().getId())
-                        .build())
-                .collect(Collectors.toList());
+        final List<Reservation> allByCustomerId = reservationRepository.findAllByCustomerId(customerId);
+
+        return reservationDtoMapper.toDtos(allByCustomerId);
     }
 }

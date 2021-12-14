@@ -40,7 +40,7 @@ class ParkingSpotControllerTestIT {
 
     @Test
     void shouldReturnJSONAndIsOkStatusWhenThereAreParkingSpotsAvailable() throws Exception {
-        //given
+        // given
         final String url = "/parking-spot/available";
 
         final ParkingSpotDto p1 = parkingSpotDtoFactory(1L);
@@ -50,10 +50,10 @@ class ParkingSpotControllerTestIT {
 
         final List<ParkingSpotDto> all = List.of(p1, p2, p3, p4);
 
-        //when
+        // when
         when(parkingSpotService.getAllAvailable()).thenReturn(all);
 
-        //then
+        // then
         mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(all.size())));
@@ -61,15 +61,15 @@ class ParkingSpotControllerTestIT {
 
     @Test
     void shouldReturnEmptyJSONAndIsOkStatusWhenThereAreNoParkingSpotsAvailable() throws Exception {
-        //given
+        // given
         final String url = "/parking-spot/available";
 
         final List<ParkingSpotDto> all = new ArrayList<>();
 
-        //when
+        // when
         when(parkingSpotService.getAllAvailable()).thenReturn(all);
 
-        //then
+        // then
         mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(all.size())));
