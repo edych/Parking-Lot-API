@@ -10,12 +10,19 @@ There is no booking restrictions per *Customer*.<br>
 ### Requirements
 * Java 11
 
-### Building and running the app
+## Building and running the app
+
+### Docker
+```bash
+docker build -t edych/parking-lot-api .
+docker run -p 8080:8080 edych/parking-lot-api
+```
+
+### Maven
 ```bash
 ./mvnw clean install
 java -jar target/parking-0.0.1-SNAPSHOT.jar
 ```
-
 ### Entity Relationship Diagram
 
 ![alt text](documentation/jdl.png)
@@ -28,7 +35,10 @@ java -jar target/parking-0.0.1-SNAPSHOT.jar
 ## API
 
 ### Swagger UI 
-Documentation available [here](http://localhost:8080/swagger-ui.html)
+Documentation available at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+### AWS ECS 
+Live version is running at [http://edych.codes/swagger-ui.html](http://edych.codes/swagger-ui.html) 
 
 ### Postman
 There is `postman.json` collection provided in the root of repository.
