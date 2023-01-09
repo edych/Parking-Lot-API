@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   codecov: codecov/codecov@3.2.2
-  aws-ecr: circleci/aws-ecr@6.12.2
 
 jobs:
   build-and-test:
@@ -23,15 +22,3 @@ workflows:
   sample:
     jobs:
       - build-and-test
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          dockerfile: Dockerfile
-          path: .
-          region: AWS_REGION
-          repo: parking-lot-api
-          attach-workspace: true
-          requires:
-            - build-and-test
